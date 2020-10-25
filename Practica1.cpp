@@ -70,17 +70,18 @@ private:
     vector<type> Input;
 
 public:
-    Competencia(char Algorithm1 = 'I', char Algorithm2 = 'B', vector<type> Input = NULL)
-    { //constructor(existe un bug que no permite inicializar el objeto usar el constructor)
+    //constructores(existe un bug que no permite inicializar con el constructor vacio)
+    Competencia(char Algorithmb = 'I', char Algorithma = 'B')
+    { //constructor con dos argumentos
+        this->Algorithm1 = Algorithmb;
+        this->Algorithm2 = Algorithma;
+    }
+
+    /*Competencia(char Algorithm1 = 'I', char Algorithm2 = 'B', vector<type> Input = NULL)
+    { //constructor completo
         this->Algorithm1 = Algorithm1;
         this->Algorithm2 = Algorithm2;
         this->Input = Input;
-    }
-    /*Competencia()
-    { //constr
-        this->Algorithm1 = 'B';
-        this->Algorithm2 = 'I';
-        this->Algorithm1 = NULL;
     }*/
 
     Competencia<type> &setinput(vector<type> in)
@@ -88,12 +89,17 @@ public:
         Input = in;
         return *this;
     }
-    void setalgorithm1(char Algorithm1)
+    Competencia &setalgorithm1(char al)
     {
-        this->Algorithm1 = Algorithm1;
+        Algorithm1 = al;
+        return *this;
     }
 
-    Competencia &setalgorithm2(char al);
+    Competencia &setalgorithm2(char al)
+    {
+        Algorithm2 = al;
+        return *this;
+    }
 
     Competencia &gettime_algthm1()
     {
@@ -123,7 +129,7 @@ int main(int argc, char const *argv[])
     Timer time;
     int num;
     vector<int> A;
-    Competencia<int> CM('a', 'v', A);
+    Competencia<int> CM('s', 'a');
     if (argv[1] == NULL)
     {
         cout << "ERROR: INGRESE EL NOMBRE O LA RUTA DEL ARCHIVO" << endl;
@@ -144,7 +150,7 @@ int main(int argc, char const *argv[])
         Fil3In >> num;
         A.push_back(num);
     }
-    CM.setalgorithm1('a');
+    CM.setalgorithm2('a');
 
     Fil3In.close();
 
