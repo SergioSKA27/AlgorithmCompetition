@@ -77,6 +77,7 @@ public:
         this->Algorithm2 = Algorithma;
     }
 
+    Competencia();
     /*Competencia(char Algorithm1 = 'I', char Algorithm2 = 'B', vector<type> Input = NULL)
     { //constructor completo
         this->Algorithm1 = Algorithm1;
@@ -84,14 +85,17 @@ public:
         this->Input = Input;
     }*/
 
-    Competencia<type> &setinput(vector<type> in)
+    Competencia<type> &
+    setinput(vector<type> in)
     { //cambiar la entrada
         Input = in;
         return *this;
     }
+
     Competencia &setalgorithm1(char al)
     {
         Algorithm1 = al;
+        cout << al;
         return *this;
     }
 
@@ -122,6 +126,13 @@ Competencia<t>::~Competencia()
 {
 }
 
+template <class t>
+Competencia<t>::Competencia()
+{
+    Algorithm1 = 'B';
+    Algorithm2 = 'I';
+}
+
 int main(int argc, char const *argv[])
 {
     ifstream Fil3In;
@@ -129,7 +140,7 @@ int main(int argc, char const *argv[])
     Timer time;
     int num;
     vector<int> A;
-    Competencia<int> CM('s', 'a');
+    Competencia<int> CM('a', 'a');
     if (argv[1] == NULL)
     {
         cout << "ERROR: INGRESE EL NOMBRE O LA RUTA DEL ARCHIVO" << endl;
@@ -150,7 +161,7 @@ int main(int argc, char const *argv[])
         Fil3In >> num;
         A.push_back(num);
     }
-    CM.setalgorithm2('a');
+    CM.setalgorithm1('B');
 
     Fil3In.close();
 
