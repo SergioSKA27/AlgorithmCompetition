@@ -2,7 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 #include <chrono> //libreria para medir los tiempos de Ejecucion
 
 using namespace std;
@@ -21,10 +21,6 @@ struct Timer
 };
 
 // Funciones extra
-void PrintTimer(Timer Time);
-
-void WriteListSort(string Filename, vector<int> &A);
-
 template <class Type>
 void Swap(Type &x, Type &y)
 { // Intercambiar dos variables
@@ -33,7 +29,17 @@ void Swap(Type &x, Type &y)
     y = aux;
 }
 
+int RandomNumber(int range_i, int range_e)
+{
+    srand(time(NULL));
+    int r;
+    r = rand() % ((range_e + 1) - (range_i));
+    return r;
+}
 //Iterativo
+template <class t>
+void SelectionSort(vector<t> &A, int p, int r);
+
 template <class t>
 void InsertionSort(vector<t> &A, int p, int r);
 
@@ -46,6 +52,9 @@ int Reacomodo(vector<t> &A, int p, int r);
 
 template <class t>
 void QuickSort(vector<t> &A, int p, int r);
+
+template <class t>
+void RandomquickSort(vector<t> &A, int p, int r);
 
 template <class t>
 void Merge(vector<t> &A, int p, int q, int r);
@@ -68,25 +77,17 @@ private:
     char Algorithm1;
     char Algorithm2;
     vector<type> Input;
+    int k; //umbral para merge hibrido
 
 public:
-    //constructores(existe un bug que no permite inicializar con el constructor vacio)
+    //constructor
     Competencia(char Algorithmb = 'I', char Algorithma = 'B')
     { //constructor con dos argumentos
         this->Algorithm1 = Algorithmb;
         this->Algorithm2 = Algorithma;
     }
 
-    Competencia();
-    /*Competencia(char Algorithm1 = 'I', char Algorithm2 = 'B', vector<type> Input = NULL)
-    { //constructor completo
-        this->Algorithm1 = Algorithm1;
-        this->Algorithm2 = Algorithm2;
-        this->Input = Input;
-    }*/
-
-    Competencia<type> &
-    setinput(vector<type> in)
+    Competencia<type> setinput(vector<type> in)
     { //cambiar la entrada
         Input = in;
         return *this;
@@ -105,18 +106,178 @@ public:
         return *this;
     }
 
-    Competencia &gettime_algthm1()
+    void setK(int k)
     {
-        if (Algorithm1 = 'B' || Algorithm1 = 'b')
-        {
+        this->k = k;
+    }
+
+    void gettime_algthm1()
+    {
+        if (Algorithm1 == 'B' || Algorithm1 == 'b')
+        { //obtiene el tiempo de ejecucion del algoritmo 1 y asigana el valor a
+            // totaltime expresado en milisegundos
             timeA.Start = chrono::system_clock::now();
-            BubbleSort<type>(Input, Input.begin(), Input.end());
+            BubbleSort<type>(Input, 0, Input.size() - 1);
             timeA.End = chrono::system_clock::now();
             totaltimeA = timeA.End - timeA.Start;
         }
-        return *this;
+
+        if (Algorithm1 == 'I' || Algorithm1 == 'i')
+        {
+            timeA.Start = chrono::system_clock::now();
+            InsertionSort<type>(Input, 0, Input.size() - 1);
+            timeA.End = chrono::system_clock::now();
+            totaltimeA = timeA.End - timeA.Start;
+        }
+
+        if (Algorithm1 == 'S' || Algorithm1 == 's')
+        {
+            timeA.Start = chrono::system_clock::now();
+            SelectionSort<type>(Input, 0, Input.size() - 1);
+            timeA.End = chrono::system_clock::now();
+            totaltimeA = timeA.End - timeA.Start;
+        }
+
+        if (Algorithm1 == 'Q' || Algorithm1 == 'q')
+        {
+            timeA.Start = chrono::system_clock::now();
+            QuickSort<type>(Input, 0, Input.size() - 1);
+            timeA.End = chrono::system_clock::now();
+            totaltimeA = timeA.End - timeA.Start;
+        }
+
+        if (Algorithm1 == 'A' || Algorithm1 == 'a')
+        {
+            timeA.Start = chrono::system_clock::now();
+            RandomquickSort<type>(Input, 0, Input.size() - 1);
+            timeA.End = chrono::system_clock::now();
+            totaltimeA = timeA.End - timeA.Start;
+        }
+
+        if (Algorithm1 == 'H' || Algorithm1 == 'h')
+        {
+            timeA.Start = chrono::system_clock::now();
+            MergeSortHibrido<type>(Input, 0, Input.size() - 1, k);
+            timeA.End = chrono::system_clock::now();
+            totaltimeA = timeA.End - timeA.Start;
+        }
+
+        if (Algorithm1 == 'M' || Algorithm1 == 'm')
+        { //obtiene el tiempo de ejecucion del algoritmo 1 y asigana el valor a
+            // totaltime expresado en milisegundos
+            timeA.Start = chrono::system_clock::now();
+            MergeSort<type>(Input, 0, Input.size() - 1);
+            timeA.End = chrono::system_clock::now();
+            totaltimeA = timeA.End - timeA.Start;
+        }
     }
 
+    Timer timeAl1()
+    {
+        Timer time;
+        time.Start = timeA.Start;
+        time.End = timeA.End;
+        return time;
+    }
+
+    void gettime_algthm2()
+    {
+        if (Algorithm2 == 'B' || Algorithm2 == 'b')
+        { //obtiene el tiempo de ejecucion del algoritmo 1 y asigana el valor a
+            // totaltime expresado en milisegundos
+            timeB.Start = chrono::system_clock::now();
+            BubbleSort<type>(Input, 0, Input.size() - 1);
+            timeB.End = chrono::system_clock::now();
+            totaltimeB = timeB.End - timeB.Start;
+        }
+
+        if (Algorithm2 == 'I' || Algorithm2 == 'i')
+        {
+            timeB.Start = chrono::system_clock::now();
+            InsertionSort<type>(Input, 0, Input.size() - 1);
+            timeB.End = chrono::system_clock::now();
+            totaltimeB = timeB.End - timeB.Start;
+        }
+
+        if (Algorithm2 == 'S' || Algorithm2 == 's')
+        {
+            timeB.Start = chrono::system_clock::now();
+            SelectionSort<type>(Input, 0, Input.size() - 1);
+            timeB.End = chrono::system_clock::now();
+            totaltimeB = timeB.End - timeB.Start;
+        }
+
+        if (Algorithm2 == 'Q' || Algorithm2 == 'q')
+        {
+            timeB.Start = chrono::system_clock::now();
+            QuickSort<type>(Input, 0, Input.size() - 1);
+            timeB.End = chrono::system_clock::now();
+            totaltimeB = timeB.End - timeB.Start;
+        }
+
+        if (Algorithm2 == 'A' || Algorithm2 == 'a')
+        {
+            timeB.Start = chrono::system_clock::now();
+            RandomquickSort<type>(Input, 0, Input.size() - 1);
+            timeB.End = chrono::system_clock::now();
+            totaltimeB = timeB.End - timeB.Start;
+        }
+
+        if (Algorithm2 == 'H' || Algorithm2 == 'h')
+        {
+            timeB.Start = chrono::system_clock::now();
+            MergeSortHibrido<type>(Input, 0, Input.size() - 1, k);
+            timeB.End = chrono::system_clock::now();
+            totaltimeB = timeB.End - timeB.Start;
+        }
+
+        if (Algorithm2 == 'M' || Algorithm2 == 'm')
+        { //obtiene el tiempo de ejecucion del algoritmo 1 y asigana el valor a
+            // totaltime expresado en milisegundos
+            timeB.Start = chrono::system_clock::now();
+            MergeSort<type>(Input, 0, Input.size() - 1);
+            timeB.End = chrono::system_clock::now();
+            totaltimeB = timeB.End - timeB.Start;
+        }
+    }
+
+    Timer timeAl2()
+    { //retorna una estructura de timepo
+        Timer time;
+        time.Start = timeB.Start;
+        time.End = timeB.End;
+        return time;
+    }
+
+    void detwinner()
+    { //compara los tiempos de A y B para determinar un ganador
+        if (totaltimeA < totaltimeB)
+        {
+            cout << "¡El ganador es el algoritmo A!" << endl;
+        }
+        else
+        {
+            cout << "¡El ganador es el algoritmo B!" << endl;
+        }
+    }
+
+    void printtime1()
+    {
+        cout << totaltimeA.count() << "Ms" << endl;
+    }
+
+    void printtime2()
+    {
+        cout << totaltimeB.count() << "Ms" << endl;
+    }
+
+    void restart()
+    {
+        Algorithm1 = ' ';
+        Algorithm1 = ' ';
+        totaltimeA.zero();
+        totaltimeB.zero();
+    }
     ~Competencia();
 };
 
@@ -126,21 +287,18 @@ Competencia<t>::~Competencia()
 {
 }
 
-template <class t>
-Competencia<t>::Competencia()
-{
-    Algorithm1 = 'B';
-    Algorithm2 = 'I';
-}
-
 int main(int argc, char const *argv[])
 {
     ifstream Fil3In;
     string Arg1;
     Timer time;
     int num;
-    vector<int> A;
-    Competencia<int> CM('a', 'a');
+    vector<int> A; //entrada
+    vector<int> C;
+    Competencia<int> CM;
+    char Al1, Al2;
+    int k;
+    char rep;
     if (argv[1] == NULL)
     {
         cout << "ERROR: INGRESE EL NOMBRE O LA RUTA DEL ARCHIVO" << endl;
@@ -161,50 +319,81 @@ int main(int argc, char const *argv[])
         Fil3In >> num;
         A.push_back(num);
     }
-    CM.setalgorithm1('B');
 
+    //Competencia
+    do
+    {
+        C = A; //copia del arreglo A
+        cout << "COMPETENCIA DE ALGORITMOS" << endl;
+        cout << "Seleccione los algoritmos que van a competir: " << endl;
+        cout << "Bubble sort       B" << endl;
+        cout << "Insertion sort    I" << endl;
+        cout << "Selection sort    S" << endl;
+        cout << "Quick sort        Q" << endl;
+        cout << "Merge sort        M" << endl;
+        cout << "Quick sort al.    A" << endl;
+        cout << "Merge hibrido     H" << endl;
+        cin >> Al1 >> Al2; // para ingresar los algoritmos(ejemplo: B A)
+        if ((Al1 == 'h' || Al1 == 'H') || (Al2 == 'h' || Al2 == 'H'))
+        { //pregunta en que tamaño los problemas se resuelven por insercion
+            cout << "Ingresa el valor de k" << endl;
+            cin >> k;
+            CM.setK(k);
+        }
+        CM.setalgorithm1(Al1).setalgorithm2(Al2).setinput(C);
+        CM.gettime_algthm1();
+        CM.gettime_algthm2();
+        CM.detwinner();
+        cout << "Tiempo del algoritmo A" << endl;
+        CM.printtime1();
+        cout << "Tiempo del algoritmo B" << endl;
+        CM.printtime2();
+        cout << "Repetir la competencia? (S/N) " << endl;
+        cin >> rep;
+        CM.restart();
+    } while (rep == 'S' || rep == 's');
     Fil3In.close();
 
     return 0;
 }
 
-void PrintTimer(Timer time)
-{ //Imprime el tiempo de ejecucion, recibe como parametros el tiempo medido al inicio y el tiempo final
-    chrono::duration<float, milli> TotalTime;
-    TotalTime = time.End - time.Start;
-    cout << TotalTime.count() << " Ms " << endl;
-}
-
-void WriteListSort(string Filename, vector<int> &A)
-{ //Escribe la lista ordenada en un archivo
-    ofstream Fileout;
-    Fileout.open(Filename, ios::out);
-    for (int i = 0; i < A.size(); i++)
-    {
-        Fileout << A.at(i) << endl;
-    }
-    Fileout.close();
-}
-
-//Insertion Sort
+//selection sort
 template <class t>
+void SelectionSort(vector<t> &A, int p, int r)
+{
+    int min;
+    for (int i = p; i < r - 1; i++)
+    {
+        min = i;
+        for (int j = i + 1; j < r; j++)
+        {
+            if (A[j] < A[min])
+            {
+                min = j;
+            }
+        }
+        Swap<t>(A[i], A[min]);
+    }
+}
 
+//*Insertion Sort
+template <class t>
 void InsertionSort(vector<t> &A, int p, int r)
 {
-    int j, mano;
-    for (int i = p + 1; i <= r; i++)
+    t key;
+    int i, j;
+    for (j = p + 1; i < r; i++)
     {
-        mano = A.at(i);
-        j = i - 1;
-        while (j > 0 && A[j] > mano)
+        key = A[j];
+        i = j--;
+        while (i >= p && A[i] > key)
         {
-            A[j++] = A[j];
-            j--;
+            A[i++] = A[i];
+            i--;
         }
-        A[j++] = mano;
+        A[i++] = key;
     }
 }
-
 //Bubble Sort
 template <class t>
 void BubbleSort(vector<t> &A, int p, int r)
@@ -223,7 +412,6 @@ void BubbleSort(vector<t> &A, int p, int r)
 
 //Merge Sort
 template <class t>
-
 void Merge(vector<t> &A, int p, int q, int r)
 {
     //Crea Arreglos nuevos y copia pedazos
@@ -255,7 +443,6 @@ void Merge(vector<t> &A, int p, int q, int r)
 }
 
 template <class t>
-
 void MergeSort(vector<t> &A, int p, int r)
 {
     int q;
@@ -268,42 +455,73 @@ void MergeSort(vector<t> &A, int p, int r)
     }
 }
 
-//Quick Sort
 template <class t>
-
+void MergeSortHibrido(vector<t> &A, int p, int r, int k)
+{
+    int q;
+    if (k < r - p)
+    {
+        q = (p + r) >> 1; //recorrido de bits
+        MergeSortHibrido(A, p, q, k);
+        MergeSortHibrido(A, q + 1, r, k);
+        Merge(A, p, q, r);
+    }
+    else
+    {
+        InsertionSort<t>(A, p, r);
+    }
+}
+//*Quick Sort
+template <class t>
 int Reacomodo(vector<t> &A, int p, int r)
 {
-    int piv = A.at(p);
+    t piv = A[p];
     int i = p;
     int j = r;
     while (i < j)
     {
         do
-        { //Aumenta i hasta encontrar un numero mayor
-            //que el pivote
+        {
             i++;
-        } while (A.at(i) < piv);
+        } while (A[i] <= piv);
+
         do
-        { //decrementa j hasta encontrar un elemento
-            //
+        {
             j--;
-        } while (A.at(j) > piv);
+        } while (A[j] > piv);
+
         if (i < j)
         {
-            Swap<int>(A[i], A[j]);
+            Swap<t>(A[i], A[j]);
         }
     }
-    Swap<int>(A[p], A[j]);
+    Swap<t>(A[p], A[j]);
     return j;
 }
-template <class t>
 
+template <class t>
 void QuickSort(vector<t> &A, int p, int r)
 {
+    int q;
     if (p < r)
     {
-        int q = Reacomodo(A, p, r);
+        q = Reacomodo<t>(A, p, r);
         QuickSort(A, p, q);
         QuickSort(A, q + 1, r);
+    }
+}
+
+template <class t>
+void RandomquickSort(vector<t> &A, int p, int r)
+{
+    int al;
+    int q;
+    if (p < r)
+    {
+        al = RandomNumber(p, r);
+        Swap<t>(A[p], A[al]);
+        q = Reacomodo<t>(A, p, r);
+        RandomquickSort(A, p, q);
+        RandomquickSort(A, q + 1, r);
     }
 }
