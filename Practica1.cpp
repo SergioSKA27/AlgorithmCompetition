@@ -78,6 +78,8 @@ private:
     char Algorithm2;
     vector<type> Input;
     int k; //umbral para merge hibrido
+    string NameAL1;
+    string NameAL2;
 
 public:
     //constructor
@@ -96,13 +98,83 @@ public:
     Competencia &setalgorithm1(char al)
     {
         Algorithm1 = al;
-        cout << al;
+
+        if (al == 'B' || al == 'b')
+        {
+            NameAL1 = "Bubble Sort";
+        }
+
+        if (al == 'I' || al == 'i')
+        {
+            NameAL1 = "Insertion Sort";
+        }
+
+        if (al == 'S' || al == 's')
+        {
+            NameAL1 = "Selection Sort";
+        }
+
+        if (al == 'M' || al == 'm')
+        {
+            NameAL1 = "Merge Sort";
+        }
+
+        if (al == 'Q' || al == 'q')
+        {
+            NameAL1 = "Quick Sort";
+        }
+
+        if (al == 'A' || al == 'a')
+        {
+            NameAL1 = "Random quick Sort";
+        }
+
+        if (al == 'H' || al == 'h')
+        {
+            NameAL1 = "Merge sort hibrido";
+        }
+
         return *this;
     }
 
     Competencia &setalgorithm2(char al)
     {
         Algorithm2 = al;
+
+        if (al == 'B' || al == 'b')
+        {
+            NameAL2 = "Bubble Sort";
+        }
+
+        if (al == 'I' || al == 'i')
+        {
+            NameAL2 = "Insertion Sort";
+        }
+
+        if (al == 'S' || al == 's')
+        {
+            NameAL2 = "Selection Sort";
+        }
+
+        if (al == 'M' || al == 'm')
+        {
+            NameAL2 = "Merge Sort";
+        }
+
+        if (al == 'Q' || al == 'q')
+        {
+            NameAL2 = "Quick Sort";
+        }
+
+        if (al == 'A' || al == 'a')
+        {
+            NameAL2 = "Random quick Sort";
+        }
+
+        if (al == 'H' || al == 'h')
+        {
+            NameAL2 = "Merge sort hibrido";
+        }
         return *this;
     }
 
@@ -253,11 +325,11 @@ public:
     { //compara los tiempos de A y B para determinar un ganador
         if (totaltimeA < totaltimeB)
         {
-            cout << "¡El ganador es el algoritmo A!" << endl;
+            cout << "¡El ganador es " << NameAL1 << " !" << endl;
         }
         else
         {
-            cout << "¡El ganador es el algoritmo B!" << endl;
+            cout << "¡El ganador es " << NameAL2 << " !" << endl;
         }
     }
 
@@ -271,6 +343,16 @@ public:
         cout << totaltimeB.count() << "Ms" << endl;
     }
 
+    string getnameal1()
+    {
+        return NameAL1;
+    }
+
+    string getnameal2()
+    {
+        return NameAL2;
+    }
+
     void restart()
     {
         Algorithm1 = ' ';
@@ -278,6 +360,7 @@ public:
         totaltimeA.zero();
         totaltimeB.zero();
     }
+
     ~Competencia();
 };
 
@@ -344,9 +427,9 @@ int main(int argc, char const *argv[])
         CM.gettime_algthm1();
         CM.gettime_algthm2();
         CM.detwinner();
-        cout << "Tiempo del algoritmo A" << endl;
+        cout << "Tiempo de ejecucion de  " << CM.getnameal1() << endl;
         CM.printtime1();
-        cout << "Tiempo del algoritmo B" << endl;
+        cout << "Tiempo de ejecucion de  " << CM.getnameal2() << endl;
         CM.printtime2();
         cout << "Repetir la competencia? (S/N) " << endl;
         cin >> rep;
