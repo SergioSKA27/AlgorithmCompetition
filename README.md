@@ -18,3 +18,6 @@ Ejemplo de como mandara llamar al programa(linux):
 ./programa numeros_mediano_03.in
 
 
+**Si lo deseas puedes agregar mas algorimtmos de ordenamiento o modificar el codigo para que puedas
+**testear otro tipo de algoritmos.
+
