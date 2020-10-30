@@ -109,35 +109,33 @@ public:
         {
             NameAL1 = "Bubble Sort";
         }
-
-        if (al == 'I' || al == 'i')
+        else if (al == 'I' || al == 'i')
         {
             NameAL1 = "Insertion Sort";
         }
-
-        if (al == 'S' || al == 's')
+        else if (al == 'S' || al == 's')
         {
             NameAL1 = "Selection Sort";
         }
-
-        if (al == 'M' || al == 'm')
+        else if (al == 'M' || al == 'm')
         {
             NameAL1 = "Merge Sort";
         }
-
-        if (al == 'Q' || al == 'q')
+        else if (al == 'Q' || al == 'q')
         {
             NameAL1 = "Quick Sort";
         }
-
-        if (al == 'A' || al == 'a')
+        else if (al == 'A' || al == 'a')
         {
             NameAL1 = "Random quick Sort";
         }
-
-        if (al == 'H' || al == 'h')
+        else if (al == 'H' || al == 'h')
         {
             NameAL1 = "Merge sort hibrido";
+        }
+        else
+        {
+            throw invalid_argument("ENTRADA NO VALIDA");
         }
 
         return *this;
@@ -151,35 +149,33 @@ public:
         {
             NameAL2 = "Bubble Sort";
         }
-
-        if (al == 'I' || al == 'i')
+        else if (al == 'I' || al == 'i')
         {
             NameAL2 = "Insertion Sort";
         }
-
-        if (al == 'S' || al == 's')
+        else if (al == 'S' || al == 's')
         {
             NameAL2 = "Selection Sort";
         }
-
-        if (al == 'M' || al == 'm')
+        else if (al == 'M' || al == 'm')
         {
             NameAL2 = "Merge Sort";
         }
-
-        if (al == 'Q' || al == 'q')
+        else if (al == 'Q' || al == 'q')
         {
             NameAL2 = "Quick Sort";
         }
-
-        if (al == 'A' || al == 'a')
+        else if (al == 'A' || al == 'a')
         {
             NameAL2 = "Random quick Sort";
         }
-
-        if (al == 'H' || al == 'h')
+        else if (al == 'H' || al == 'h')
         {
             NameAL2 = "Merge sort hibrido";
+        }
+        else
+        {
+            throw invalid_argument("ENTRADA NO VALIDA");
         }
         return *this;
     }
@@ -410,6 +406,7 @@ int main(int argc, char const *argv[])
     int num;
     vector<long long> A; //entrada
     vector<long long> C;
+    vector<long long>::iterator i; //iterador
     Competencia<long long> CM;
     char Al1, Al2;
     int k;
@@ -455,7 +452,16 @@ int main(int argc, char const *argv[])
             cin >> k;
             CM.setK(k);
         }
-        CM.setalgorithm1(Al1).setalgorithm2(Al2).setinput(C);
+        try
+        {
+            CM.setalgorithm1(Al1).setalgorithm2(Al2).setinput(C);
+        }
+        catch (invalid_argument &e)
+        {
+            std::cerr << e.what() << '\n';
+            exit(-1);
+        }
+
         CM.gettime_algthm1();
         CM.gettime_algthm2();
         CM.detwinner();
@@ -464,7 +470,7 @@ int main(int argc, char const *argv[])
         CM.printtime1Ms();
         cout << "Tiempo de ejecucion de  " << CM.getnameal2() << endl;
         CM.printtime2S();
-        CM.printtime1Ms();
+        CM.printtime2Ms();
         cout << "Repetir la competencia? (S/N) " << endl;
         cin >> rep;
         CM.restart();
@@ -495,20 +501,21 @@ void SelectionSort(vector<t> &A, int p, int r)
 
 //*Insertion Sort
 template <class t>
+
 void InsertionSort(vector<t> &A, int p, int r)
 {
     t key;
     int i, j;
-    for (j = p + 1; i < r; i++)
+    for (j = p + 1; j <= r; j++)
     {
         key = A[j];
-        i = j--;
+        i = j - 1;
         while (i >= p && A[i] > key)
         {
-            A[i++] = A[i];
+            A[i + 1] = A[i];
             i--;
         }
-        A[i++] = key;
+        A[i + 1] = key;
     }
 }
 //Bubble Sort
