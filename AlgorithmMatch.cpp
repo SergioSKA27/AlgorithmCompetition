@@ -387,6 +387,8 @@ public:
         Algorithm1 = ' ';
         totaltimeA.zero();
         totaltimeB.zero();
+        totaltimeAs.zero();
+        totaltimeBs.zero();
     }
 
     ~Competencia();
